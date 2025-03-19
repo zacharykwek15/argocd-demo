@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: http-echo
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    external-dns.alpha.kubernetes.io/hostname: http-echo.sctp-sandbox.com
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: http-echo.sctp-sandbox.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: http-echo
+            port:
+              number: 80
+  tls:
+  - hosts:
+      - http-echo.sctp-sandbox.com
+    secretName: http-echo

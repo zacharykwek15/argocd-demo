@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-webapp
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    external-dns.alpha.kubernetes.io/hostname: nginx-webapp.sctp-sandbox.com
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: nginx-webapp.sctp-sandbox.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-webapp
+            port:
+              number: 80
+  tls:
+  - hosts:
+      - nginx-webapp.sctp-sandbox.com
+    secretName: nginx-webapp
